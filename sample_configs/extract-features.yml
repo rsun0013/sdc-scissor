@@ -1,0 +1,4 @@
+command: 'extract-features'
+options:
+  tests: 'destination'
+  segmentation: 'angle-based'

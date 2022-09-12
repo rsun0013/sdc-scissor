@@ -1,0 +1,13 @@
+command: 'label-tests'
+options:
+  home: 'E:\Beemng\BeamNG.tech.v0.25.4.0\BeamNG.tech.v0.25.4.0'
+  user: 'E:\Beemng\BeamNG.tech.v0.25.4.0\BeamNG.tech.v0.25.4.0'
+  tests: 'destination'
+  rf: 1.5
+  oob: 0.3
+  max_speed: 50
+  interrupt: true
+  obstacles: false
+  bump_dist: null
+  delineator_dist: null
+  field_of_view: 120

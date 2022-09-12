@@ -1,0 +1,4 @@
+command: 'evaluate-models'
+options:
+  csv: 'destination/road_features.csv'
+  models_dir: 'trained_models'

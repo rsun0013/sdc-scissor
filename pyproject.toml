@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "SDC-Scissor"
+version = "2.0.3"
+description = "A cost-effective test selection for self-driving cars in virtual environments"
+authors = ["Christian Birchler <birchler.chr@gmail.com>"]
+license = "GPL-3.0-or-later"
+readme = "README.md"
+repository = "https://github.com/ChristianBirchler/sdc-scissor"
+documentation = "https://sdc-scissor.readthedocs.io/"
+packages = [
+    {include = "sdc_scissor"}
+]
+
+[tool.poetry.scripts]
+sdc-scissor = "sdc_scissor.cli:cli"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+click = "^8.0.4"
+beamngpy = "=1.22"
+pandas = "^1.4.1"
+Shapely = "^1.8.1"
+scikit-learn = "^1.0.2"
+pymoo = "=0.4.2.2"
+PyYAML = "^6.0"
+
+[tool.poetry.dev-dependencies]
+parameterized = "^0.8.1"
+Sphinx = "^4.5.0"
+sphinx-rtd-theme = "^1.0.0"
+pytest = "^7.1.2"
+coverage = "^6.3.2"
+pytest-mock = "^3.7.0"
+black = "^22.3.0"
+myst-parser = "^0.18.0"
+notebook = "^6.4.12"
+pyfakefs = "^4.6.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
