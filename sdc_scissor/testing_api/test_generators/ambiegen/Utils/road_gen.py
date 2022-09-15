@@ -32,7 +32,7 @@ class RoadGen:
         self.map_size = map_size
 
         self.transitionName = [["SS", "SL", "SR", "SU"],
-                               ["LS", "LL", "LR"], ["RS", "RL", "RR"]]
+                               ["LS", "LL", "LR",], ["RS", "RL", "RR"]]
 
         self.transitionMatrix = [
             [0.1, 0.40, 0.05, 0.45],
@@ -150,8 +150,8 @@ class RoadGen:
                 # Added new transition state SU (Straight to Uturn)
                 elif change == "SU":
                     state = "right"
-                    value = 45
-                    count = 3
+                    value = 30
+                    count = 4
                     while(count > 0 and flag):
                         self.states.append([state, value])
                         flag = self.turn_right(value)
