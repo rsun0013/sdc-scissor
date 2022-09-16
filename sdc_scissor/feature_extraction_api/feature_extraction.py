@@ -38,6 +38,7 @@ class RoadFeatures:
         self.full_road_diversity = 0
         self.safety = None
         self.avg_Segment_length = 0
+        self.uturns = 0
 
     def to_dict(self):
         """
@@ -131,6 +132,10 @@ class FeatureExtractor:
         """
         road_features = RoadFeatures()
         road_features.test_duration = test.test_duration
+        try:
+            road_features.uturns = test.uturns
+        except:
+            pass
 
         raw_feature_data = {"angles": [], "pivots": [], "diversities": []}
 
