@@ -356,7 +356,7 @@ class Map:
         tc = states
         for state in tc:
             action = tc[state]["state"]
-            if action == "straight":
+            if action == "straight" or action == "uturn":
                 if self.go_straight(tc[state]["value"]) == True:
                     self.position_to_center()
                     point = self.road_point

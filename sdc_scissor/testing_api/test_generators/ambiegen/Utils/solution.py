@@ -24,7 +24,15 @@ class Solution:
         self.intp_points = []
         self.too_sharp = 0
         self.just_fitness = 0
+        self.uturns = 0
 
+    def calcTurns(self):
+        for s in self.states:
+            action = self.states[s]["state"]
+            #print(action)
+            if action == "uturn":
+                #print("uturn")
+                self.uturns = self.uturns + 1
     def eval_fitness(self):
         road = self.road_points
         if not road:  # if no road points were calculated yet

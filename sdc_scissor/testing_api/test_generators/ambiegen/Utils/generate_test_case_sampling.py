@@ -22,5 +22,7 @@ class GenerateTestCaseSampling(Sampling):
             states = generator.test_case_generate()
             s = Solution()
             s.states = states
+            #s.calcTurns()
+            #print("state: {}".format(states))
             X[i, 0] = s
         return X

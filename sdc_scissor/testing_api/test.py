@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 class Test:
-    def __init__(self, test_id, road_points: list[list], test_outcome, test_duration=None):
+    def __init__(self, test_id, road_points: list[list],uturns, test_outcome, test_duration=None):
         """
         Class representing a test case.
 
@@ -24,6 +24,7 @@ class Test:
         self.road_points = road_points
         self.interpolated_road_points = self.__interpolate(road_points)
         self.simulation_data = []
+        self.uturns = uturns
 
     def save_as_json(self, file_path: Path):
         """

@@ -27,6 +27,7 @@ class RoadGen:
         self.init_file = "init.json"
         self.points_file = "points.json"
         self.road_points = []
+        self.uTurns = 0
         self.init_states = ["straight", "left", "right"]
 
         self.map_size = map_size
@@ -163,19 +164,19 @@ class RoadGen:
                     self.road_points.append(
                         tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
                     state = "uturn"
-
                 else:
                     print("Error")
             elif state == "uturn":
                 # U turn goes back into straight.
                 value = np.random.choice(self.len_values)
-                state = "straight"
+                state = "uturn"
                 self.states.append([state, value])
                 flag = self.car_map.go_straight(value)
                 if flag == False:
                     return OnFlagFalse()
                 self.road_points.append(
                     tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
+                state="straight"
                 pass
             elif state == "left":
                 change = np.random.choice(

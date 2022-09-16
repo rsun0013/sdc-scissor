@@ -63,11 +63,12 @@ class CustomAmbieGenGenerator:
         test_cases = []
         i = 0
         log.info(res)
-        for gen1 in range(1,len(res.history)):
+        for gen1 in range(gen,len(res.history)):
             i = 0
             while i < len(res.F):
                 result = res.history[gen1].pop.get("X")[i]
                 road_points = result[0].intp_points
-                test_cases.append(road_points)
+                result[0].calcTurns()
+                test_cases.append((road_points,result[0].uturns))
                 i += 1
         return test_cases

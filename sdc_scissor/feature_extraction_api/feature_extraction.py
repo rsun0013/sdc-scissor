@@ -196,6 +196,7 @@ class FeatureExtractor:
         angles_lst = self.__road_geometry_calculator.extract_turn_angles(segment_road_points)
 
         angles_sum = sum(angles_lst)
+        print("ang:{}".format(angles_sum))
 
         if angle_threshold > angles_sum > -angle_threshold:
             return SegmentType.straight
