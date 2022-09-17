@@ -38,6 +38,7 @@ class RoadFeatures:
         self.full_road_diversity = 0
         self.safety = None
         self.avg_Segment_length = 0
+        self.uturns = 0
 
     def to_dict(self):
         """
@@ -131,6 +132,10 @@ class FeatureExtractor:
         """
         road_features = RoadFeatures()
         road_features.test_duration = test.test_duration
+        try:
+            road_features.uturns = test.uturns
+        except:
+            pass
 
         raw_feature_data = {"angles": [], "pivots": [], "diversities": []}
 
@@ -196,6 +201,7 @@ class FeatureExtractor:
         angles_lst = self.__road_geometry_calculator.extract_turn_angles(segment_road_points)
 
         angles_sum = sum(angles_lst)
+        print("ang:{}".format(angles_sum))
 
         if angle_threshold > angles_sum > -angle_threshold:
             return SegmentType.straight

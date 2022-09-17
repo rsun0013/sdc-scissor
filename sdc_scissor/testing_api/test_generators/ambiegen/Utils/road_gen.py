@@ -27,16 +27,18 @@ class RoadGen:
         self.init_file = "init.json"
         self.points_file = "points.json"
         self.road_points = []
+        self.uTurns = 0
         self.init_states = ["straight", "left", "right"]
 
         self.map_size = map_size
 
-        self.transitionName = [["SS", "SL", "SR"], ["LS", "LL", "LR"], ["RS", "RL", "RR"]]
+        self.transitionName = [["SS", "SL", "SR", "SU"],
+                               ["LS", "LL", "LR",], ["RS", "RL", "RR"]]
 
         self.transitionMatrix = [
-            [0.1, 0.45, 0.45],
+            [0.1, 0.40, 0.05, 0.45],
             [0.2, 0.4, 0.4],
-            [0.2, 0.4, 0.4],
+            [0.2, 0.4, 0.4]
         ]  # probabilities of switching states
 
         self.min_len = min_len
@@ -54,6 +56,14 @@ class RoadGen:
             i for i in range(self.min_angle, self.max_angle + 1, self.step_ang)
         ]  # a list of angles to turn
 
+    def turn_right(self, angle):
+        value = angle
+        state = "right"
+        self.states.append([state, value])
+        flag = self.car_map.turn_right(value)
+
+        return flag
+
     def test_case_generate(self):
         """Function that produces a list with states and road points"""
 
@@ -64,99 +74,122 @@ class RoadGen:
         self.init_states = ["straight", "left", "right"]
 
         self.car_map = Map(self.map_size)
-        self.init_a = [int(self.car_map.init_pos[0]), int(self.car_map.init_pos[1])]
-        self.init_b = [int(self.car_map.init_end[0]), int(self.car_map.init_end[1])]
+        self.init_a = [int(self.car_map.init_pos[0]),
+                       int(self.car_map.init_pos[1])]
+        self.init_b = [int(self.car_map.init_end[0]),
+                       int(self.car_map.init_end[1])]
 
-        self.road_points.append(tuple(((self.init_a[0] + self.init_b[0]) / 2, (self.init_a[1] + self.init_b[1]) / 2)))
+        self.road_points.append(tuple(
+            ((self.init_a[0] + self.init_b[0]) / 2, (self.init_a[1] + self.init_b[1]) / 2)))
 
         state = np.random.choice(self.init_states)
-        if state == "straight":
-            value = np.random.choice(self.len_values)
-        else:
-            value = np.random.choice(self.ang_values)
+
+        value = np.random.choice(
+            self.len_values) if state == "straight" else np.random.choice(self.ang_values)
 
         if state == "straight":
             self.car_map.go_straight(value)
-            self.road_points.append(tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
+            self.road_points.append(
+                tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
         elif state == "left":
             self.car_map.turn_left(value)
-            self.road_points.append(tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
+            self.road_points.append(
+                tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
         else:
             self.car_map.turn_right(value)
-            self.road_points.append(tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
+            self.road_points.append(
+                tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
 
         self.states = [[state, value]]
 
         flag = True
 
+        def OnFlagFalse():
+            del self.road_points[-1]
+            del self.states[-1]
+            if len(self.road_points) <= 2:
+                self.car_map.go_straight(1)
+                self.road_points.append(
+                    tuple(
+                        (self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2)
+                )
+            return self.states_to_dict()
+
         while flag == True:
             if state == "straight":
-                change = np.random.choice(self.transitionName[0], p=self.transitionMatrix[0])  # choose the next state
+                # choose the next state
+                change = np.random.choice(
+                    self.transitionName[0], p=self.transitionMatrix[0])
                 if change == "SS":  # stay in the same state
                     value = np.random.choice(self.len_values)
                     state = "straight"
                     self.states.append([state, value])
                     flag = self.car_map.go_straight(value)
                     if flag == False:
-                        del self.road_points[-1]
-                        del self.states[-1]
-                        if len(self.road_points) <= 2:
-                            self.car_map.go_straight(1)
-                            self.road_points.append(
-                                tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2)
-                            )
-                        return self.states_to_dict()
-                    self.road_points.append(tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
+                        return OnFlagFalse()
+
+                    self.road_points.append(
+                        tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
                 elif change == "SL":  # change from go straight to turn left
                     value = np.random.choice(self.ang_values)
                     state = "left"
                     self.states.append([state, value])
                     flag = self.car_map.turn_left(value)
                     if flag == False:
-                        del self.road_points[-1]
-                        del self.states[-1]
-                        if len(self.road_points) <= 2:
-                            self.car_map.go_straight(1)
-                            self.road_points.append(
-                                tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2)
-                            )
-                        return self.states_to_dict()
-                    self.road_points.append(tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
+                        return OnFlagFalse()
+                    self.road_points.append(
+                        tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
                 elif change == "SR":
                     value = np.random.choice(self.ang_values)
                     state = "right"
                     self.states.append([state, value])
                     flag = self.car_map.turn_right(value)
                     if flag == False:
-                        del self.road_points[-1]
-                        del self.states[-1]
-                        if len(self.road_points) <= 2:
-                            self.car_map.go_straight(1)
-                            self.road_points.append(
-                                tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2)
-                            )
-                        return self.states_to_dict()
-                    self.road_points.append(tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
+                        return OnFlagFalse()
+                    self.road_points.append(
+                        tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
+                # Added new transition state SU (Straight to Uturn)
+                elif change == "SU":
+                    state = "right"
+                    value = 30
+                    count = 4
+                    while(count > 0 and flag):
+                        self.states.append([state, value])
+                        flag = self.turn_right(value)
+                        count -= 1
+                    if flag == False:
+                        # Author repeats the same code when flag is false.
+                        # So I placed it into local function OnFlagFalse().
+                        return OnFlagFalse()
+                    self.road_points.append(
+                        tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
+                    state = "uturn"
                 else:
                     print("Error")
-
+            elif state == "uturn":
+                # U turn goes back into straight.
+                value = np.random.choice(self.len_values)
+                state = "uturn"
+                self.states.append([state, value])
+                flag = self.car_map.go_straight(value)
+                if flag == False:
+                    return OnFlagFalse()
+                self.road_points.append(
+                    tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
+                state="straight"
+                pass
             elif state == "left":
-                change = np.random.choice(self.transitionName[1], p=self.transitionMatrix[1])
+                change = np.random.choice(
+                    self.transitionName[1], p=self.transitionMatrix[1])
                 if change == "LS":
                     value = np.random.choice(self.len_values)
                     state = "straight"
                     self.states.append([state, value])
                     flag = self.car_map.go_straight(value)
                     if flag == False:
-                        del self.road_points[-1]
-                        del self.states[-1]
-                        if len(self.road_points) <= 2:
-                            self.car_map.go_straight(1)
-                            self.road_points.append(
-                                tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2)
-                            )
-                        return self.states_to_dict()
-                    self.road_points.append(tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
+                        return OnFlagFalse()
+                    self.road_points.append(
+                        tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
                     pass
 
                 elif change == "LL":
@@ -165,15 +198,9 @@ class RoadGen:
                     self.states.append([state, value])
                     flag = self.car_map.turn_left(value)
                     if flag == False:
-                        del self.road_points[-1]
-                        del self.states[-1]
-                        if len(self.road_points) <= 2:
-                            self.car_map.go_straight(1)
-                            self.road_points.append(
-                                tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2)
-                            )
-                        return self.states_to_dict()
-                    self.road_points.append(tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
+                        return OnFlagFalse()
+                    self.road_points.append(
+                        tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
                     pass
                 elif change == "LR":
                     value = np.random.choice(self.ang_values)
@@ -181,36 +208,25 @@ class RoadGen:
                     self.states.append([state, value])
                     flag = self.car_map.turn_right(value)
                     if flag == False:
-                        del self.road_points[-1]
-                        del self.states[-1]
-                        if len(self.road_points) <= 2:
-                            self.car_map.go_straight(1)
-                            self.road_points.append(
-                                tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2)
-                            )
-                        return self.states_to_dict()
-                    self.road_points.append(tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
+                        return OnFlagFalse()
+                    self.road_points.append(
+                        tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
                     pass
                 else:
                     print("Error")
                     pass
             elif state == "right":
-                change = np.random.choice(self.transitionName[2], p=self.transitionMatrix[2])
+                change = np.random.choice(
+                    self.transitionName[2], p=self.transitionMatrix[2])
                 if change == "RS":
                     value = np.random.choice(self.len_values)
                     state = "straight"
                     self.states.append([state, value])
                     flag = self.car_map.go_straight(value)
                     if flag == False:
-                        del self.road_points[-1]
-                        del self.states[-1]
-                        if len(self.road_points) <= 2:
-                            self.car_map.go_straight(1)
-                            self.road_points.append(
-                                tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2)
-                            )
-                        return self.states_to_dict()
-                    self.road_points.append(tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
+                        return OnFlagFalse()
+                    self.road_points.append(
+                        tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
                     pass
                 elif change == "RL":
                     value = np.random.choice(self.ang_values)
@@ -218,15 +234,9 @@ class RoadGen:
                     self.states.append([state, value])
                     flag = self.car_map.turn_left(value)
                     if flag == False:
-                        del self.road_points[-1]
-                        del self.states[-1]
-                        if len(self.road_points) <= 2:
-                            self.car_map.go_straight(1)
-                            self.road_points.append(
-                                tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2)
-                            )
-                        return self.states_to_dict()
-                    self.road_points.append(tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
+                        return OnFlagFalse()
+                    self.road_points.append(
+                        tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
                     pass
                 elif change == "RR":
                     value = np.random.choice(self.ang_values)
@@ -234,15 +244,9 @@ class RoadGen:
                     self.states.append([state, value])
                     flag = self.car_map.turn_right(value)
                     if flag == False:
-                        del self.road_points[-1]
-                        del self.states[-1]
-                        if len(self.road_points) <= 2:
-                            self.car_map.go_straight(1)
-                            self.road_points.append(
-                                tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2)
-                            )
-                        return self.states_to_dict()
-                    self.road_points.append(tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
+                        return OnFlagFalse()
+                    self.road_points.append(
+                        tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
                     pass
                 else:
                     print("Error")

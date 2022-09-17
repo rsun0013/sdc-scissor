@@ -47,14 +47,18 @@ class TestGenerator:
         Generate tests according to the parameters set while instantiating this object.
         """
         logging.debug("* generate")
-        generated_tests_as_list_of_road_points = self.random_generator.start()
+        tests = self.random_generator.start()
+        generated_tests_as_list_of_road_points = [i[0] for i in tests ]
+        uturns = [i[1] for i in tests]
         generated_tests_as_list_of_road_points = self.__extract_valid_roads(generated_tests_as_list_of_road_points)
 
         generated_tests_as_list_of_road_points = self.__add_sine_bumps(generated_tests_as_list_of_road_points)
 
+        i = 0
         for road_points in generated_tests_as_list_of_road_points:
-            test = Test(test_id=next(self.__id_generator), road_points=road_points, test_outcome="NOT_EXECUTED")
+            test = Test(test_id=next(self.__id_generator), road_points=road_points,uturns=uturns[i], test_outcome="NOT_EXECUTED")
             self.generated_tests.append(test)
+            i += 1
         logging.info("** {} tests generated".format(len(generated_tests_as_list_of_road_points)))
         logging.info("** test generator has {} tests".format(len(self.generated_tests)))
 
