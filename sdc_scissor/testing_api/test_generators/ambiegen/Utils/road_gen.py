@@ -127,16 +127,13 @@ class RoadGen:
 
         if state == "straight":
             self.car_map.go_straight(value)
-            self.road_points.append(
-                tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
         elif state == "left":
             self.car_map.turn_left(value)
-            self.road_points.append(
-                tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
         else:
             self.car_map.turn_right(value)
-            self.road_points.append(
-                tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
+
+        self.road_points.append(
+            tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
 
         self.states = [[state, value]]
 
