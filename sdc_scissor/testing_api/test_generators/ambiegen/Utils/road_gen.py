@@ -32,11 +32,11 @@ class RoadGen:
 
         self.map_size = map_size
 
-        self.transitionName = [["SS", "SL", "SR", "SU"],
+        self.transitionName = [["SS", "SL", "SR", "SU", "SRND"],
                                ["LS", "LL", "LR", ], ["RS", "RL", "RR"]]
 
         self.transitionMatrix = [
-            [0.1, 0.40, 0.05, 0.45],
+            [0.1, 0.2, 0.1, 0.2, 0.4],
             [0.2, 0.4, 0.4],
             [0.2, 0.4, 0.4]
         ]  # probabilities of switching states
@@ -65,6 +65,43 @@ class RoadGen:
         flag = self.car_map.go_straight(value)
         return (state, flag)
 
+    def go_uturn(self):
+        value = 30
+        state = "right"
+        for i in range(4):
+            self.states.append([state, value])
+            flag = self.car_map.turn_right(value)
+            if not flag:
+                return (state, flag)
+            self.road_points.append(
+                tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
+        return self.go_straight()
+
+    def go_right_roundabout(self):
+        value = 30
+        state = "left"
+        self.states.append([state, value])
+        flag = self.car_map.turn_left(value)
+        if not flag:
+            return (state, flag)
+        self.road_points.append(
+            tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
+        # Turn right 4 times, 15 degree angle
+        value = 15
+        for i in range(4):
+            self.states.append([state, value])
+            flag = self.car_map.turn_right(value)
+            if not flag:
+                return (state, flag)
+        self.road_points.append(
+            tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
+        # go back to left 30 degree angle
+        value = 30
+        state = "left"
+        self.states.append([state, value])
+        flag = self.car_map.turn_left(value)
+        return (state, flag)
+
     def go_left(self):
         value = np.random.choice(self.ang_values)
         state = "left"
@@ -89,18 +126,6 @@ class RoadGen:
                     (self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2)
             )
         return self.states_to_dict()
-
-    def go_uturn(self):
-        value = 30
-        state = "right"
-        for i in range(4):
-            self.states.append([state, value])
-            flag = self.car_map.turn_right(value)
-            if not flag:
-                return (state, flag)
-            self.road_points.append(
-                tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
-        return self.go_straight()
 
     def test_case_generate(self):
         """Function that produces a list with states and road points"""
@@ -154,6 +179,8 @@ class RoadGen:
                 # Added new transition state SU (Straight to Uturn)
                 elif change == "SU":
                     (state, flag) = self.go_uturn()
+                elif change == "SRND":
+                    (state, flag) = self.go_right_roundabout()
                 else:
                     print("Error")
             elif state == "left":
