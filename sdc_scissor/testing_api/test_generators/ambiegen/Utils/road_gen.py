@@ -36,7 +36,7 @@ class RoadGen:
                                ["LS", "LL", "LR",], ["RS", "RL", "RR"]]
 
         self.transitionMatrix = [
-            [0.1, 0.40, 0.05, 0.45],
+            [0.1, 0.40, 0.50, 0.00],
             [0.2, 0.4, 0.4],
             [0.2, 0.4, 0.4]
         ]  # probabilities of switching states
