@@ -7,7 +7,7 @@ model = {
     "min_len": 28,  # minimal possible distance in meters
     "max_len": 30,  # maximal possible disance to go straight in meters
     "min_angle": 2,  # minimal angle of rotation in degrees
-    "max_angle": 15,  # maximal angle of rotation in degrees
+    "max_angle": 20,  # maximal angle of rotation in degrees
 }
 
 files = {"ga_archive": ".\\GA_archive\\", "tc_img": ".\\TC_img\\", "tc_file": ".\\TC_file\\"}
