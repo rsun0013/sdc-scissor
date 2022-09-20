@@ -53,7 +53,10 @@ for j in range(i):
         uncorr.add(corrmat.columns[j])
 
 df = df.drop(columns=list(uncorr.union(corr)))
-df = df.drop(columns=['feature_Unnamed: 0'])
+try:
+    df = df.drop(columns=['feature_Unnamed: 0'])
+except:
+    pass
 print(df.columns)
 print(corr)
 print(uncorr)
