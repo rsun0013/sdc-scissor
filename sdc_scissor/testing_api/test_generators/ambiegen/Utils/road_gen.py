@@ -58,11 +58,11 @@ class RoadGen:
 
     # Go to straight State
 
-    def go_straight(self):
+    def go_straight(self,state = "straight"):
         value = np.random.choice(self.len_values)
-        state = "straight"
         self.states.append([state, value])
         flag = self.car_map.go_straight(value)
+        state = "straight"
         return (state, flag)
 
     def go_uturn(self):
@@ -75,7 +75,7 @@ class RoadGen:
                 return (state, flag)
             self.road_points.append(
                 tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
-        return self.go_straight()
+        return self.go_straight(state="uturn")
 
     def go_right_roundabout(self):
         value = 30
@@ -97,7 +97,7 @@ class RoadGen:
             tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
         # go back to left 30 degree angle
         value = 30
-        state = "left"
+        state = "rnd"
         self.states.append([state, value])
         flag = self.car_map.turn_left(value)
         return (state, flag)
