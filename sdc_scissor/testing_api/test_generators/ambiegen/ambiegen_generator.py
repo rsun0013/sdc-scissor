@@ -63,7 +63,7 @@ class CustomAmbieGenGenerator:
         test_cases = []
         i = 0
         log.info(res)
-        for gen1 in range(round(gen/2),len(res.history)):
+        for gen1 in range(gen-20,len(res.history)):
             i = 0
             while i < len(res.F):
                 result = res.history[gen1].pop.get("X")[i]
