@@ -51,14 +51,18 @@ i += 1
 for j in range(i):
     if abs(corrmat.iloc[i, j]) < 0.2:
         uncorr.add(corrmat.columns[j])
-
-df = df.drop(columns=list(uncorr.union(corr)))
+dropcols = list(uncorr.union(corr))
+#dropcols.remove("feature_uturns")
+#df = df.drop(columns=dropcols)
 try:
     df = df.drop(columns=['feature_Unnamed: 0'])
 except:
     pass
+df = df[~df.duplicated()]
+
+
 print(df.columns)
 print(corr)
 print(uncorr)
 print(df.head())
-df.to_csv('processed_features.csv')
+df.to_csv('processed_features1.csv')
