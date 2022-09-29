@@ -56,8 +56,10 @@ class Map:
         return pos, end
 
     def position_to_line(self, position):
-        x = [position[0][0], position[1][0], (position[0][0] + position[1][0]) / 2]
-        y = [position[0][1], position[1][1], (position[0][1] + position[1][1]) / 2]
+        x = [position[0][0], position[1][0],
+             (position[0][0] + position[1][0]) / 2]
+        y = [position[0][1], position[1][1],
+             (position[0][1] + position[1][1]) / 2]
         return x, y
 
     def position_to_center(self):
@@ -132,7 +134,8 @@ class Map:
             p_b_ = p_b + u_v_ * test_distance
 
             new_pos = [p_a_, p_b_]
-            if self.in_polygon(new_pos) == True:  # check if it's in correct direction
+            # check if it's in correct direction
+            if self.in_polygon(new_pos) == True:
                 R = np.array([[0, 1], [-1, 0]])
                 u_v = R.dot(u_v)
                 p_a_ = p_a + u_v * distance
@@ -321,7 +324,8 @@ class Map:
         new_mid = (new[0] + new[1]) / 2
 
         point = Point(new_mid[0], new_mid[1])
-        polygon = Polygon([tuple(current[0]), tuple(current[1]), tuple(prev[0]), tuple(prev[1])])
+        polygon = Polygon([tuple(current[0]), tuple(
+            current[1]), tuple(prev[0]), tuple(prev[1])])
         return polygon.contains(point)
 
     def get_sector(self):
