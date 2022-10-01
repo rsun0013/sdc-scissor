@@ -53,7 +53,7 @@ for j in range(i):
         uncorr.add(corrmat.columns[j])
 dropcols = list(uncorr.union(corr))
 #dropcols.remove("feature_uturns")
-#df = df.drop(columns=dropcols)
+df = df.drop(columns=dropcols)
 try:
     df = df.drop(columns=['feature_Unnamed: 0'])
 except:
