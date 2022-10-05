@@ -36,7 +36,7 @@ class RoadGen:
                                ["LS", "LL", "LR", ], ["RS", "RL", "RR"]]
 
         self.transitionMatrix = [
-            [0.1, 0.40, 0.50, 0.00,0.00],
+            [0.1, 0.3, 0.3, 0.3, 0.00],
             [0.2, 0.4, 0.4],
             [0.2, 0.4, 0.4]
         ]  # probabilities of switching states
@@ -58,7 +58,7 @@ class RoadGen:
 
     # Go to straight State
 
-    def go_straight(self,state = "straight"):
+    def go_straight(self, state="straight"):
         value = np.random.choice(self.len_values)
         self.states.append([state, value])
         flag = self.car_map.go_straight(value)
