@@ -67,7 +67,7 @@ class RoadGen:
 
     def go_uturn(self):
         value = 30
-        state = "right"
+        state = "uturn"
         for i in range(4):
             self.states.append([state, value])
             flag = self.car_map.turn_right(value)
@@ -75,7 +75,7 @@ class RoadGen:
                 return (state, flag)
             self.road_points.append(
                 tuple((self.car_map.current_pos[0] + self.car_map.current_pos[1]) / 2))
-        return self.go_straight(state="uturn")
+        return self.go_straight(state="straight")
 
     def go_right_roundabout(self):
         value = 30

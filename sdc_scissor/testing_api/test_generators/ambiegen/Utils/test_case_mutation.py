@@ -30,8 +30,10 @@ class TestCaseMutation(Mutation):
                 old_points = sn.road_points
                 old_states = child
                 if wr < 0.2:
-
-                    candidates = list(np.random.randint(0, high=len(child), size=2))
+                    while True:
+                        candidates = list(np.random.randint(0, high=len(child), size=2))
+                        if child["st" + str(candidates[0])]["state"] != "uturn" and child["st" + str(candidates[0])]["state"] != "uturn":
+                            break
                     temp = child["st" + str(candidates[0])]
                     child["st" + str(candidates[0])] = child["st" + str(candidates[1])]
                     child["st" + str(candidates[1])] = temp
@@ -42,7 +44,7 @@ class TestCaseMutation(Mutation):
                         duration_list = []
                         if child["st" + str(num)]["state"] == "straight":
                             duration_list = np.arange(cf.model["min_len"], cf.model["max_len"], 1)
-                        else:
+                        elif (child["st" + str(num)][value] == "left") or (child["st" + str(num)][value] == "right"):
                             duration_list = np.arange(cf.model["min_angle"], cf.model["max_angle"], 5)
 
                         child["st" + str(num)][value] = int(np.random.choice(duration_list))
@@ -53,13 +55,16 @@ class TestCaseMutation(Mutation):
                             child["st" + str(num)][value] = np.random.choice(["left", "right"])
                             duration_list = np.arange(cf.model["min_angle"], cf.model["max_angle"], 5)
                             child["st" + str(num)]["value"] = int(np.random.choice(duration_list))
-                        else:
+                        elif (child["st" + str(num)][value] == "left") or (child["st" + str(num)][value] == "right"):
                             child["st" + str(num)][value] = "straight"
                             duration_list = np.arange(cf.model["min_len"], cf.model["max_len"], 1)
                             child["st" + str(num)]["value"] = int(np.random.choice(duration_list))
 
                 else:
                     cand = list(np.random.randint(0, high=len(child), size=int(len(child) / 2)))
+                    for i in range(len(cand)):
+                        if child["st" + str(cand[i])]["state"] == "uturn":
+                            cand.remove(cand[i])
                     while cand:
                         c1 = np.random.choice(cand)
                         cand.remove(c1)

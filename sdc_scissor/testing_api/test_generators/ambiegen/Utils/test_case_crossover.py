@@ -39,12 +39,15 @@ class TestCaseCrossover(Crossover):
                 tc_a = s_a.states
                 tc_b = s_b.states
 
-                if len(tc_a) < len(tc_b):
-                    crossover_point = rm.randint(1, len(tc_a) - 1)
-                elif len(tc_b) < len(tc_a):
-                    crossover_point = rm.randint(1, len(tc_b) - 1)
-                else:
-                    crossover_point = rm.randint(1, len(tc_a) - 1)
+                while True:
+                    if len(tc_a) < len(tc_b):
+                        crossover_point = rm.randint(1, len(tc_a) - 1)
+                    elif len(tc_b) < len(tc_a):
+                        crossover_point = rm.randint(1, len(tc_b) - 1)
+                    else:
+                        crossover_point = rm.randint(1, len(tc_a) - 1)
+                    if tc_a[crossover_point]["state"] != "uturn" and tc_b[crossover_point]["state"] != "uturn":
+                        break
 
                 if s_a.n_states > 2 and s_b.n_states > 2:
 

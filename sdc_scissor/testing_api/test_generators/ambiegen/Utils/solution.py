@@ -33,6 +33,7 @@ class Solution:
             if action == "uturn":
                 #print("uturn")
                 self.uturns = self.uturns + 1
+        self.uturns = self.uturns/4
     def eval_fitness(self):
         road = self.road_points
         if not road:  # if no road points were calculated yet
