@@ -44,10 +44,11 @@ class TestCaseMutation(Mutation):
                         duration_list = []
                         if child["st" + str(num)]["state"] == "straight":
                             duration_list = np.arange(cf.model["min_len"], cf.model["max_len"], 1)
+                            child["st" + str(num)][value] = int(np.random.choice(duration_list))
                         elif (child["st" + str(num)][value] == "left") or (child["st" + str(num)][value] == "right"):
                             duration_list = np.arange(cf.model["min_angle"], cf.model["max_angle"], 5)
 
-                        child["st" + str(num)][value] = int(np.random.choice(duration_list))
+                            child["st" + str(num)][value] = int(np.random.choice(duration_list))
 
                     elif value == "state":
 
@@ -62,7 +63,7 @@ class TestCaseMutation(Mutation):
 
                 else:
                     cand = list(np.random.randint(0, high=len(child), size=int(len(child) / 2)))
-                    for i in range(len(cand)):
+                    for i in range(len(cand),0):
                         if child["st" + str(cand[i])]["state"] == "uturn":
                             cand.remove(cand[i])
                     while cand:
