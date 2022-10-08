@@ -8,8 +8,6 @@ model = {
     "max_len": 20,  # maximal possible disance to go straight in meters
     "min_angle": 10,  # minimal angle of rotation in degrees
     "max_angle": 70,  # maximal angle of rotation in degrees
-
-
 }
 
 files = {"ga_archive": ".\\GA_archive\\",
