@@ -25,7 +25,7 @@ As we pulled and pushed the code to this repo, the first commit contains work fr
 Our changes:
 tool for pre-processing of of simulation data for isa, tools to resume a paused simulation in beemng, modifications to ga including reporting of the average segment length as a new feature, increasing the number of tests that ambiegen generator generates, adding u turns(not entirely successful due to very low numbers generated).
 ## Our Dataset
-
+the gestHigh7 to gesthigh12 folders contain our highway test cases, in the unique folder under each highway folders are the test cases in json and the *_road_features file contain the road features as a csv, with simulation results under various conditions as described in the file name. The Town test cases are in the Town1-1 to Town 6-1 folders, with both the json test cases and road features. The pre-processed data is in the root folder, marked *_processed_features.csv, for various dataset combinations, before being sent to isa. the ga parameters for each of the test suites is described in the experiments doc in our google drive which is shared with our supervisor.
 # Below readme from original repo
 ## A Tool for Cost-effective Simulation-based Test Selection in Self-driving Cars Software
 <div style="text-align: center;">
