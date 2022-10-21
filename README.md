@@ -20,7 +20,13 @@
 [![](https://sonarcloud.io/api/project_badges/measure?project=ChristianBirchler_sdc-scissor&metric=security_rating)](https://sonarcloud.io/summary/overall?id=ChristianBirchler_sdc-scissor)
 [![](https://sonarcloud.io/api/project_badges/measure?project=ChristianBirchler_sdc-scissor&metric=sqale_rating)](https://sonarcloud.io/summary/overall?id=ChristianBirchler_sdc-scissor)
 [![](https://sonarcloud.io/api/project_badges/measure?project=ChristianBirchler_sdc-scissor&metric=code_smells)](https://sonarcloud.io/summary/overall?id=ChristianBirchler_sdc-scissor)
+# This repository has been forked from ChristianBirchler's sdc-scissor repository
+As we pulled and pushed the code to this repo, the first commit contains work from the authors or the above stated repo in addition to some of our changes.
+Our changes:
+tool for pre-processing of of simulation data for isa, tools to resume a paused simulation in beemng, modifications to ga including reporting of the average segment length as a new feature, increasing the number of tests that ambiegen generator generates, adding u turns(not entirely successful due to very low numbers generated).
+## Our Dataset
 
+# Below readme from original repo
 ## A Tool for Cost-effective Simulation-based Test Selection in Self-driving Cars Software
 <div style="text-align: center;">
 <a href="https://github.com/ChristianBirchler/sdc-scissor">
